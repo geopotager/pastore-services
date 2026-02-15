@@ -2,7 +2,10 @@ import { ServiceRequest, User } from '../types';
 
 // En PROD (Vercel), VITE_API_URL sera défini (ex: https://mon-backend.onrender.com/api)
 // En DEV, il est vide, donc on utilise '/api' qui passe par le proxy Vite
-const BASE_URL = (import.meta as any).env.VITE_API_URL || '/api';
+const BASE_URL =
+  import.meta.env.MODE === "production"
+    ? "https://pastore-backend.onrender.com/api"
+    : "/api";
 
 // Suppression du slash final s'il existe pour éviter les doubles slashs
 const API_URL = BASE_URL.endsWith('/') ? BASE_URL.slice(0, -1) : BASE_URL;
