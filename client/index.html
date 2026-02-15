@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Pastore Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Space Grotesk', 'sans-serif'],
+            },
+            colors: {
+              'neo-yellow': '#FFDE59',
+              'neo-green': '#7ED957',
+              'neo-purple': '#CB6CE6',
+              'neo-blue': '#5CE1E6',
+              'neo-pink': '#FF66C4',
+              'neo-white': '#FFFFFF',
+              'neo-black': '#181818',
+            },
+            boxShadow: {
+              'neo': '4px 4px 0px 0px rgba(0,0,0,1)',
+              'neo-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+              'neo-lg': '8px 8px 0px 0px rgba(0,0,0,1)',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      body {
+        background-color: #f3f4f6;
+        -webkit-tap-highlight-color: transparent;
+      }
+      /* Custom scrollbar to match brutalist theme */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #000; 
+        border: 1px solid white;
+      }
+
+      /* Animations Globales */
+      @keyframes bounceIn { 
+        0% { opacity: 0; transform: scale(0.3); } 
+        50% { opacity: 1; transform: scale(1.05); } 
+        70% { transform: scale(0.9); } 
+        100% { transform: scale(1); } 
+      }
+      @keyframes slideUp { 
+        from { opacity: 0; transform: translateY(20px); } 
+        to { opacity: 1; transform: translateY(0); } 
+      }
+      @keyframes slideInView { 
+        from { opacity: 0; transform: translateX(30px); } 
+        to { opacity: 1; transform: translateX(0); } 
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.4",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.564.0",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@^3.4.1",
+    "clsx": "https://esm.sh/clsx@^2.1.1",
+    "cors": "https://esm.sh/cors@^2.8.6",
+    "multer": "https://esm.sh/multer@^2.0.2",
+    "jsonwebtoken": "https://esm.sh/jsonwebtoken@^9.0.3",
+    "express": "https://esm.sh/express@^5.2.1",
+    "fs": "https://esm.sh/fs@^0.0.1-security",
+    "path": "https://esm.sh/path@^0.12.7",
+    "nodemailer": "https://esm.sh/nodemailer@^8.0.1",
+    "url": "https://esm.sh/url@^0.11.4",
+    "bcrypt": "https://esm.sh/bcrypt@^6.0.0",
+    "sqlite3": "https://esm.sh/sqlite3@^5.1.7",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.4",
+    "helmet": "https://esm.sh/helmet@^8.1.0",
+    "dotenv": "https://esm.sh/dotenv@^17.3.1",
+    "express-rate-limit": "https://esm.sh/express-rate-limit@^8.2.1",
+    "morgan": "https://esm.sh/morgan@^1.10.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

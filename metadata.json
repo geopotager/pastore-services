@@ -1,0 +1,7 @@
+{
+  "name": "Pastore Services",
+  "description": "Application de services à domicile : Bricolage, Jardinage, Informatique.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
