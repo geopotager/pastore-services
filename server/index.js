@@ -38,7 +38,9 @@ app.use(morgan('combined'));
 app.use(express.json());
 
 const allowedOrigins = [
-  process.env.FRONTEND_URL,
+  'https://pastore-services.vercel.app',
+  'https://pastoreservices.org',
+  'https://www.pastoreservices.org',
   'http://localhost:5173'
 ];
 
