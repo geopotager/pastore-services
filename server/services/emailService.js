@@ -6,7 +6,14 @@ const APP_NAME = process.env.APP_NAME;
 const EMAIL_FROM = process.env.EMAIL_FROM;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 
+// 🔍 Debug au démarrage
+console.log("🔐 RESEND KEY PRESENT:", !!process.env.RESEND_API_KEY);
+console.log("🔐 RESEND KEY PREFIX:", process.env.RESEND_API_KEY?.substring(0, 10));
+console.log("📧 EMAIL_FROM:", EMAIL_FROM);
+console.log("📧 ADMIN_EMAIL:", ADMIN_EMAIL);
+
 export async function sendNewRequestEmails(data) {
+
   const htmlAdmin = `
     <h2>Nouvelle demande : ${data.category}</h2>
     <p><strong>Client :</strong> ${data.contact.name}</p>
@@ -27,25 +34,30 @@ export async function sendNewRequestEmails(data) {
   `;
 
   try {
-    // Email admin
-    await resend.emails.send({
+    // 📤 Email Admin
+    const adminResponse = await resend.emails.send({
       from: `${APP_NAME} <${EMAIL_FROM}>`,
       to: ADMIN_EMAIL,
       subject: `Nouvelle demande - ${data.category}`,
       html: htmlAdmin,
     });
 
-    // Email client
+    console.log("📨 Admin Email Response:", adminResponse);
+
+    // 📤 Email Client
     if (data.contact.email) {
-      await resend.emails.send({
+      const clientResponse = await resend.emails.send({
         from: `${APP_NAME} <${EMAIL_FROM}>`,
         to: data.contact.email,
         subject: "Confirmation de votre demande",
         html: htmlClient,
       });
+
+      console.log("📨 Client Email Response:", clientResponse);
     }
 
     console.log("✅ Emails envoyés via Resend");
+
   } catch (error) {
     console.error("❌ Erreur envoi Resend:", error);
   }
