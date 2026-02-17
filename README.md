@@ -6,7 +6,7 @@ Application Full-Stack (React + Node.js/Express) pour la gestion de services à 
 
 Le projet est divisé en deux parties :
 - **client/** : Frontend React (Vite, TailwindCSS)
-- **server/** : Backend Node.js (Express, SQLite, Nodemailer)
+- **server/** : Backend Node.js (Express, SQLite)
 
 ## Prérequis
 
@@ -39,7 +39,7 @@ npm run dev
 
 - **Authentification** : JWT, hashage mots de passe (bcrypt).
 - **Upload** : Gestion des photos via Multer (stockées dans `server/uploads`).
-- **Emails** : Notifications automatiques via Nodemailer.
+- **Emails** : 
 - **Base de données** : SQLite (fichier `server/pastore.db` généré automatiquement).
 - **Sécurité** : Helmet, Rate Limiting, CORS.
 

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import cors from 'cors';
 import multer from 'multer';
-import nodemailer from 'nodemailer';
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -17,13 +17,7 @@ const ADMIN_EMAIL = 'mathias.hogne@gmail.com';
 
 // Configuration Email (Exemple avec Gmail - Nécessite un "Mot de passe d'application")
 // Idéalement, utilisez des variables d'environnement (process.env.EMAIL_USER)
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'votre.email.pro@gmail.com', // À configurer
-    pass: 'votre_mot_de_passe_application' // À configurer
-  }
-});
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

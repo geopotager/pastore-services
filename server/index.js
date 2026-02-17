@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
-import nodemailer from 'nodemailer';
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -73,15 +73,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ================= EMAIL =================
 
-const transporter = nodemailer.createTransport({
-  service: process.env.EMAIL_SERVICE,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
 
 // Vérifie SMTP au démarrage
 transporter.verify((error, success) => {
