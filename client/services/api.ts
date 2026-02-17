@@ -1,6 +1,11 @@
 import { ServiceRequest, User } from '../types';
 
-const API_URL = 'http://localhost:3000/api';
+const BASE_URL =
+  import.meta.env.MODE === "production"
+    ? "https://pastore-backend.onrender.com/api"
+    : "http://localhost:3000/api";
+
+const API_URL = BASE_URL;
 
 export const ApiService = {
   // Gestion du token JWT
