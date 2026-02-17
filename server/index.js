@@ -177,7 +177,7 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
         // Réponse immédiate
         res.status(201).json({ success: true });
 
-        // Envoi email en arrière-plan
+        // Email async (non bloquant)
         sendNewRequestEmails(data).catch(err =>
           console.error("Email async error:", err)
         );
@@ -186,6 +186,35 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+// GET USER REQUESTS
+app.get('/api/requests', authenticateToken, (req, res, next) => {
+  db.all(
+    `SELECT * FROM requests WHERE user_id = ? ORDER BY created_at DESC`,
+    [req.user.id],
+    (err, rows) => {
+      if (err) return next(err);
+
+      res.json(rows.map(row => ({
+        id: row.id,
+        category: row.category,
+        description: row.description,
+        status: row.status,
+        createdAt: row.created_at,
+        booking: {
+          date: row.booking_date,
+          time: row.booking_time
+        },
+        contact: {
+          name: row.contact_name,
+          phone: row.contact_phone,
+          address: row.contact_address,
+          zip: row.contact_zip
+        }
+      })));
+    }
+  );
 });
 
 // ================= ERROR HANDLER =================
