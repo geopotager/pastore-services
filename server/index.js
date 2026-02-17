@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
-
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -11,6 +10,7 @@ import jwt from 'jsonwebtoken';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import crypto from 'crypto';
 import db from './database.js';
 
 dotenv.config();
@@ -73,17 +73,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-
-// Vérifie SMTP au démarrage
-transporter.verify((error, success) => {
-  if (error) {
-    console.error("❌ SMTP ERROR:", error);
-  } else {
-    console.log("✅ SMTP prêt à envoyer des emails");
-  }
-});
-
 // ================= AUTH =================
 
 const authenticateToken = (req, res, next) => {
@@ -140,10 +129,19 @@ app.post('/api/login', (req, res, next) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ error: "Identifiants incorrects" });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '30d' });
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      SECRET_KEY,
+      { expiresIn: '30d' }
+    );
 
     res.json({
-      user: { id: user.id, name: user.name, email: user.email, phone: user.phone },
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone
+      },
       token
     });
   });
@@ -156,7 +154,8 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
     const requestId = crypto.randomUUID();
 
     db.run(
-      `INSERT INTO requests (id, user_id, category, description, booking_date, booking_time, contact_name, contact_phone, contact_address, contact_zip, status, created_at)
+      `INSERT INTO requests 
+      (id, user_id, category, description, booking_date, booking_time, contact_name, contact_phone, contact_address, contact_zip, status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         requestId,
@@ -172,23 +171,8 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
         'pending',
         Date.now()
       ],
-      async function (err) {
+      function (err) {
         if (err) return next(err);
-
-        console.log("📧 Tentative envoi email...");
-
-        try {
-          await transporter.sendMail({
-            from: `"Pastore" <${process.env.EMAIL_USER}>`,
-            to: ADMIN_EMAIL,
-            subject: `Nouvelle demande - ${data.category}`,
-            html: `<h2>${data.contact.name}</h2><p>${data.description}</p>`
-          });
-
-          console.log("✅ Email envoyé !");
-        } catch (mailErr) {
-          console.error("❌ Email ERROR:", mailErr);
-        }
 
         res.status(201).json({ success: true });
       }
@@ -209,4 +193,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur port ${PORT}`);
+  console.log("✅ SMTP supprimé - prêt pour Resend");
 });
