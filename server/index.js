@@ -1,3 +1,4 @@
+import { sendNewRequestEmails } from "./services/emailService.js";
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer';
@@ -18,7 +19,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const SECRET_KEY = process.env.JWT_SECRET;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 
 // ================= STORAGE =================
 
@@ -174,7 +174,13 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
       function (err) {
         if (err) return next(err);
 
+        // Réponse immédiate
         res.status(201).json({ success: true });
+
+        // Envoi email en arrière-plan
+        sendNewRequestEmails(data).catch(err =>
+          console.error("Email async error:", err)
+        );
       }
     );
   } catch (err) {
@@ -193,5 +199,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur port ${PORT}`);
-  console.log("✅ SMTP supprimé - prêt pour Resend");
+  console.log("📧 Emailing actif via Resend");
 });
