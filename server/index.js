@@ -17,6 +17,8 @@ import db from './database.js';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 3000;
 const SECRET_KEY = process.env.JWT_SECRET;
 
