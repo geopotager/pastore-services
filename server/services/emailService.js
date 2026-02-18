@@ -8,11 +8,10 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 
 // 🔍 Debug au démarrage
 console.log("🔐 RESEND KEY PRESENT:", !!process.env.RESEND_API_KEY);
-console.log("🔐 RESEND KEY PREFIX:", process.env.RESEND_API_KEY?.substring(0, 10));
 console.log("📧 EMAIL_FROM:", EMAIL_FROM);
 console.log("📧 ADMIN_EMAIL:", ADMIN_EMAIL);
 
-export async function sendNewRequestEmails(data) {
+export async function sendNewRequestEmails(data, files = []) {
 
   const htmlAdmin = `
     <h2>Nouvelle demande : ${data.category}</h2>
@@ -23,6 +22,8 @@ export async function sendNewRequestEmails(data) {
     <hr/>
     <p>${data.description}</p>
     <p><strong>Date souhaitée :</strong> ${data.booking.date} à ${data.booking.time}</p>
+    <hr/>
+    <p><strong>Nombre de photos jointes :</strong> ${files.length}</p>
   `;
 
   const htmlClient = `
@@ -34,17 +35,26 @@ export async function sendNewRequestEmails(data) {
   `;
 
   try {
+
+    // 📎 Préparer les attachments (admin uniquement)
+    const attachments = files.map(file => ({
+      filename: file.originalname,
+      content: file.buffer.toString("base64"),
+      type: file.mimetype
+    }));
+
     // 📤 Email Admin
     const adminResponse = await resend.emails.send({
       from: `${APP_NAME} <${EMAIL_FROM}>`,
       to: ADMIN_EMAIL,
       subject: `Nouvelle demande - ${data.category}`,
       html: htmlAdmin,
+      attachments: attachments.length > 0 ? attachments : undefined
     });
 
     console.log("📨 Admin Email Response:", adminResponse);
 
-    // 📤 Email Client
+    // 📤 Email Client (sans pièces jointes)
     if (data.contact.email) {
       const clientResponse = await resend.emails.send({
         from: `${APP_NAME} <${EMAIL_FROM}>`,

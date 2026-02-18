@@ -65,15 +65,24 @@ app.use('/api/register', authLimiter);
 
 // ================= MULTER =================
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOADS_DIR),
-  filename: (req, file, cb) => {
-    const safeName = file.originalname.replace(/[^a-z0-9.]/gi, '_').toLowerCase();
-    cb(null, Date.now() + '-' + safeName);
+const storage = multer.memoryStorage();
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 4 * 1024 * 1024, // 4MB max par photo
+    files: 5
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error("Type de fichier non autorisé"));
+    }
   }
 });
-
-const upload = multer({ storage });
 
 // ================= AUTH =================
 
@@ -180,7 +189,7 @@ app.post('/api/requests', upload.array('photos', 5), async (req, res, next) => {
         res.status(201).json({ success: true });
 
         // Email async (non bloquant)
-        sendNewRequestEmails(data).catch(err =>
+        sendNewRequestEmails(data, req.files || []).catch(err =>
           console.error("Email async error:", err)
         );
       }
