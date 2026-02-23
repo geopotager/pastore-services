@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import React, { useState, useEffect } from 'react';
 import { 
   Menu, X, Plus, Calendar, User as UserIcon, 
@@ -658,6 +659,9 @@ export default function App() {
            </button>
         </div>
       )}
+
+      <Analytics />
+
     </div>
   );
 }
