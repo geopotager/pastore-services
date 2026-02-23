@@ -5,6 +5,7 @@ import {
   Hammer, Trees, Monitor, FileText, Wrench, ChevronLeft,
   MapPin, Phone, Mail, Info, PaintRoller, Droplets
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 import { NeoButton, NeoCard, NeoInput, NeoTextArea } from './components/NeoComponents';
 import { SERVICES, MOCK_SLOTS } from './constants';
 import { ServiceCategory, ServiceRequest, User, ContactDetails } from './types';
@@ -658,6 +659,7 @@ export default function App() {
            </button>
         </div>
       )}
+      <Analytics />
     </div>
   );
 }
